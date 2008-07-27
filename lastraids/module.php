@@ -16,16 +16,15 @@ $portal_module['lastraids'] = array(
 			'name'			    => 'LastRaids Module',
 			'path'			    => 'lastraids',
 			'version'		    => '1.0.0',
-			'author'        => 'Corgan',
+			'author'        	=> 'Corgan',
 			'contact'		    => 'http://www.eqdkp-plus.com',
-			'description'   => 'Information on last raids',
-			'positions'     => array('left1', 'left2', 'right'),
-      'install'       => array(
-                            'autoenable'        => '1',
-                            'defaultposition'   => 'right',
-                            'defaultnumber'     => '3',
-                          ),
-    );
+			'description'   	=> 'Information on last raids',
+			'positions'     	=> array('left1', 'left2', 'right'),
+      		'install'       	=> array(
+                            			'autoenable'        => '1',
+			                            'defaultposition'   => 'right',
+			                            'defaultnumber'     => '3',),
+    		);
 
 $portal_settings['lastraids'] = array(
   'pk_last_raids_limit'     => array(
@@ -49,9 +48,11 @@ $portal_settings['lastraids'] = array(
       ),
 );
 
-if(!function_exists(lastraids_module)){
-  function lastraids_module(){
-  	global $eqdkp_root_path , $user, $eqdkp,$tpl,$conf_plus,$html, $plang;
+if(!function_exists(lastraids_module))
+{
+	function lastraids_module()
+  	{
+  		global $eqdkp_root_path , $user, $eqdkp,$tpl,$conf_plus,$html, $plang,$conf_plus;
 
 		include_once($eqdkp_root_path.'pluskernel/bridge/bridge_class.php');
 		$br = new eqdkp_bridge();
@@ -71,11 +72,13 @@ if(!function_exists(lastraids_module)){
 					$item_icons = "";
 					$loot_limit = ($conf_plus['pk_lastraids_lootLimit'] > 0) ? $conf_plus['pk_lastraids_lootLimit'] : 7 ;
 					$raid_items = $br->get_last_items($loot_limit,$raid['raid_id']);
+					
 					if (is_array($raid_items))
 					{
 						foreach($raid_items as $item)
 						{
-							$item_icons .= $html->itemstats_item(stripslashes($item['name']),false,true);
+							$item_icons .=  "<a href=".$eqdkp_root_path."viewitem.php?i=".$item['id'].">". $html->itemstats_item(stripslashes($item['name']),false,true)."</a>" ;										
+							$item_icons .= ($conf_plus['pk_itemstats'] == 1 ) ? '' : ' | ' ;							
 						}
 					}
 				}
@@ -106,7 +109,6 @@ if(!function_exists(lastraids_module)){
 						</tr>";
 			}
 			$out .= '</table>';
-
 		}
 
 		return $out;
