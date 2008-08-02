@@ -40,6 +40,7 @@ $portal_settings['lastraids'] = array(
         'language'  => 'pk_last_raids_limit',
         'property'  => 'text',
         'size'      => '2',
+        'help'      => 'pk_help_nextraids_limit'
       ),
   'pk_set_lastraids_showloot'     => array(
         'name'      => 'pk_set_lastraids_showloot',
@@ -47,12 +48,14 @@ $portal_settings['lastraids'] = array(
         'property'  => 'checkbox',
         'size'      => false,
         'options'   => false,
+        'help'      => 'pk_help_lastitems_deactive'
       ),
   'pk_lastraids_lootLimit'     => array(
         'name'      => 'pk_lastraids_lootLimit',
         'language'  => 'pk_lastraids_lootLimit',
         'property'  => 'text',
         'size'      => '2',
+        'help'      => 'pk_help_lastitems_limit'
       ),
 );
 
