@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 $portal_module['lastraids'] = array(
 			'name'			    => 'LastRaids Module',
 			'path'			    => 'lastraids',
-			'version'		    => '1.0.0',
+			'version'		    => '1.0.1',
 			'author'        	=> 'Corgan',
 			'contact'		    => 'http://www.eqdkp-plus.com',
 			'description'   	=> 'Information on last raids',
