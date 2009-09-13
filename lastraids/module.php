@@ -65,68 +65,71 @@ if(!function_exists(lastraids_module))
   	{
   		global $eqdkp_root_path , $user, $eqdkp,$tpl,$conf_plus,$html, $plang,$conf_plus, $pdc;
 
-  		$out = $pdc->get('dkp.portal.modul.lastraids',false,true);
-  		if (!$out)
-  		{
+  		$cached_data = $pdc->get('dkp.portal.modul.lastraids',false,true);
+  		if (!$cached_data) {
 			include_once($eqdkp_root_path.'pluskernel/bridge/bridge_class.php');
 			$br = new eqdkp_bridge();
 
 			$limit = ($conf_plus['pk_last_raids_limit'] > 0)  ? $conf_plus['pk_last_raids_limit'] : 5 ;
 			$lastraids= $br->get_last_Group_Raids($limit);
 
-			if (is_array($lastraids))
-			{
-				$out = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="noborder">';
-
-				foreach ($lastraids as $raid)
-				{
+			if (is_array($lastraids)) {
+				foreach ($lastraids as $raid) {
 					//Items
-					if (!$conf_plus['pk_set_lastraids_showloot'])
-					{
+					if (!$conf_plus['pk_set_lastraids_showloot']) {
 						$item_icons = "";
 						$loot_limit = ($conf_plus['pk_lastraids_lootLimit'] > 0) ? $conf_plus['pk_lastraids_lootLimit'] : 7 ;
 						$raid_items = $br->get_last_items($loot_limit,$raid['raid_id']);
 
-						if (is_array($raid_items))
-						{
-							foreach($raid_items as $item)
-							{
-								$item_icons .=  "<a href=\"{$eqdkp_root_path}viewitem.php?i=".$item['id']."\">". $html->itemstats_item(stripslashes($item['name']),$item['game_itemid'],true)."</a>" ;
-								$item_icons .= ($conf_plus['pk_itemstats'] == 1 ) ? '' : ' | ' ;
+						if (is_array($raid_items)) {
+							foreach($raid_items as $item) {
+								$items2cache[$raid['raid_id']][$item['id']] = $html->itemstats_item(stripslashes($item['name']),$item['game_itemid'],true);
 							}
 						}
 					}
+					$raiddata2cache[$raid['raid_id']]['raid_icon'] = $raid['raid_icon'];
+					$raiddata2cache[$raid['raid_id']]['raid_name'] = $raid['raid_name'];
+					$raiddata2cache[$raid['raid_id']]['raid_date'] = $raid['raid_date'];
+					$raiddata2cache[$raid['raid_id']]['raid_note'] = $raid['raid_note'];
+				}
+			}
+			$cached_data = array('raids' => $raiddata2cache, 'items' => $items2cache);
+            $pdc->put('dkp.portal.modul.lastraids',$cached_data,86400,false,true);
+        }
+  		if(is_array($cached_data['raids'])) {
+			$out = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="noborder">';
+			foreach($cached_data['raids'] as $raid_id => $raid) {
+				$item_icons = "";
+				foreach($cached_data['items'][$raid_id] as $item_id => $item_icon) {
+					$item_icons .= '<a href="'.$eqdkp_root_path.'viewitem.php?i='.$item_id.'">'.$item_icon.'</a>';
+				}
+				$img = $eqdkp_root_path."games/".$eqdkp->config['default_game']."/events/".$raid['raid_icon'];
+				$img = (file_exists($img)) ? "<img src=".$img.">" : "" ;
 
-					$img = "{$eqdkp_root_path}games/".$eqdkp->config['default_game']."/events/".$raid['raid_icon'];
-					$img = (file_exists($img)) ? "<img src=".$img.">" : "" ;
-
-					$class = $eqdkp->switch_row_class();
-					$out .= '<tr class="'.$class.'" nowrap onmouseover="this.className=\'rowHover\';" onmouseout="this.className=\''.$class.'\';">'.
-								"<td>
-									<table>
-										<tr>
-											<td valign=top>
-												<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
+				$class = $eqdkp->switch_row_class();
+				$out .= '<tr class="'.$class.'" nowrap onmouseover="this.className=\'rowHover\';" onmouseout="this.className=\''.$class.'\';">'.
+						     "<td>
+						     	<table>
+									<tr>
+										<td valign=top>
+											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
 												".$img."</a>
-												</a>
-											</td>
-											<td valign=top>
-												<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
+											</a>
+										</td>
+										<td valign=top>
+											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
 												".$raid['raid_name']."</a><br>".
 												strftime($user->style['strtime_date_short'], $raid['raid_date']).
 												"<p><span class=small> ".$raid['raid_note']."</span><br>".
 												$item_icons.
-											"</td>
-										</tr>
-									</table>
-								</td>
-							</tr>";
-				}
-				$out .= '</table>';
+										"</td>
+									</tr>
+								</table>
+						     </td>
+						</tr>";
 			}
-			$pdc->put('dkp.portal.modul.lastraids',$out,86400,false,true);
+			$out .= '</table>';
   		}
-
 		return $out;
   }
 }
