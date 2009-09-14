@@ -104,7 +104,7 @@ if(!function_exists(lastraids_module))
 					$item_icons .= '<a href="'.$eqdkp_root_path.'viewitem.php?i='.$item_id.'">'.$item_icon.'</a>';
 				}
 				$img = $eqdkp_root_path."games/".$eqdkp->config['default_game']."/events/".$raid['raid_icon'];
-				$img = (file_exists($img)) ? "<img src=".$img.">" : "" ;
+				$img = (file_exists($img)) ? "<img src='".$img."' width='40' height='40'>" : "" ;
 
 				$class = $eqdkp->switch_row_class();
 				$out .= '<tr class="'.$class.'" nowrap onmouseover="this.className=\'rowHover\';" onmouseout="this.className=\''.$class.'\';">'.
