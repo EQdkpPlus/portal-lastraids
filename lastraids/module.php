@@ -112,12 +112,12 @@ if(!function_exists(lastraids_module))
 						     	<table>
 									<tr>
 										<td valign=top>
-											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
+											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid_id."'>
 												".$img."</a>
 											</a>
 										</td>
 										<td valign=top>
-											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid['raid_id']."'>
+											<a href='{$eqdkp_root_path}viewraid.php?r=". $raid_id."'>
 												".$raid['raid_name']."</a><br>".
 												strftime($user->style['strtime_date_short'], $raid['raid_date']).
 												"<p><span class=small> ".$raid['raid_note']."</span><br>".
