@@ -100,8 +100,10 @@ if(!function_exists(lastraids_module))
 			$out = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="noborder">';
 			foreach($cached_data['raids'] as $raid_id => $raid) {
 				$item_icons = "";
-				foreach($cached_data['items'][$raid_id] as $item_id => $item_icon) {
-					$item_icons .= '<a href="'.$eqdkp_root_path.'viewitem.php?i='.$item_id.'">'.$item_icon.'</a>';
+				if(is_array($cached_data['items'][$raid_id])){
+					foreach($cached_data['items'][$raid_id] as $item_id => $item_icon) {
+						$item_icons .= '<a href="'.$eqdkp_root_path.'viewitem.php?i='.$item_id.'">'.$item_icon.'</a>';
+					}
 				}
 				$img = $eqdkp_root_path."games/".$eqdkp->config['default_game']."/events/".$raid['raid_icon'];
 				$img = (file_exists($img)) ? "<img src='".$img."' width='40' height='40'>" : "" ;
