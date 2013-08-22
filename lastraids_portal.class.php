@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class lastraids_portal extends portal_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'pdh', 'pdc', 'core', 'game', 'time', 'config');
+		$shortcuts = array('user', 'pdh', 'pdc', 'core', 'game', 'time', 'config', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -79,16 +79,16 @@ class lastraids_portal extends portal_generic {
 
 	public function output() {
 		infotooltip_js();
-		$output = $this->pdc->get('dkp.portal.modul.lastraids.'.$this->root_path,false,true);
+		$output = $this->pdc->get('portal.modul.lastraids',false,true);
 		if (!$output) {
-			$output = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">';
+			$output = '<table width="100%" class="colorswitch">';
 			$limit = ($this->config->get('pk_last_raids_limit') > 0) ? $this->config->get('pk_last_raids_limit') : 5;
 			$lastraids = $this->pdh->maget('raid', array('event', 'date', 'note', 'value'), 0, array($this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc')));
 			$lastraids = array_slice($lastraids, 0, $limit, true);
 			if (!is_array($lastraids) || count($lastraids) < 1) {
-				$output .= '<tr><td>'.$this->user->lang('lastraids_no_raids').'</td></tr>';
-				$lastraids = array();
+				return $this->user->lang('lastraids_no_raids');
 			}
+			
 			foreach ($lastraids as $raid_id => &$raid) {
 				//Items
 				$raid['items'] = '';
@@ -99,23 +99,22 @@ class lastraids_portal extends portal_generic {
 						$num = 0;
 						foreach($raid_items as $item_id) {
 							if($num > $loot_limit) break;
-							$raid['items'] .= $this->pdh->get('item', 'link_itt', array($item_id, '{ROOT_PATH}viewitem.php', '', false, 0, 16, false, 'icon')).' ';
+							$raid['items'] .= $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->build('item', false, false, false), '', false, 0, 16, false, 'icon', true)).' ';
 							$num++;
 						}
 					}
 				}
-				$img = str_replace($this->root_path, '{ROOT_PATH}', $this->game->decorate('events', array($raid['event'], 40)));
-				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, '{ROOT_PATH}viewraid.php'));
-				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, '{ROOT_PATH}viewraid.php'));
+				$img = $this->game->decorate('events', array($raid['event'], 40));
+				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->build('raid', false, false, false), '', true));
+				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, $this->routing->build('raid', false, false, false), '', true));
 				$raid['note'] = (strlen($raid['note']) > 40) ? substr($raid['note'], 0, 37).'...' : $raid['note'];
 				$output .= '<tr><td width="42"><a href="'.$link.'">'.$img.'</a></td>';
 				$output .= '<td>'.$html_link.'<br />'.$this->time->user_date($raid['date']).'<br />'.$raid['note'].'<br />'.$raid['items'].'</td></tr>';
 			}
 			$output .= '</table>';
-			$this->pdc->put('dkp.portal.modul.lastraids.'.$this->root_path,$output,86400,false,true);
+			$this->pdc->put('portal.modul.lastraids',$output,86400,false,true);
 		}
-		return str_replace('{ROOT_PATH}', $this->root_path, $output);
+		return $output;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_lastraids_portal', lastraids_portal::__shortcuts());
 ?>
