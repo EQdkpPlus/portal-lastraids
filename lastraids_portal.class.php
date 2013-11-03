@@ -31,6 +31,7 @@ class lastraids_portal extends portal_generic {
 		'name'			=> 'LastRaids Module',
 		'version'		=> '2.0.0',
 		'author'		=> 'Corgan',
+		'icon'			=> 'fa-trophy',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Information on last raids',
 	);
