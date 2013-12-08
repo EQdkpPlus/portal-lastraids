@@ -39,9 +39,7 @@ class lastraids_portal extends portal_generic {
 			'size'		=> '2',
 		),
 		'showloot'	=> array(
-			'type'		=> 'checkbox',
-			'size'		=> false,
-			'options'	=> false,
+			'type'		=> 'radio',
 		),
 		'lootLimit'	=> array(
 			'type'		=> 'text',
