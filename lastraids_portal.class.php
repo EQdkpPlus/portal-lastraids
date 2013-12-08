@@ -61,10 +61,6 @@ class lastraids_portal extends portal_generic {
 			'member_update',
 			'raid_update'
 	);
-	
-	public function reset(){
-		$this->pdc->del_prefix('dkp.portal.modul.lastraids.');
-	}
 
 	public function output() {
 		infotooltip_js();
