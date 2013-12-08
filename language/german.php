@@ -24,9 +24,9 @@ $lang = array(
 	'lastraids'					=> 'Letzte Raids',
 	'lastraids_name'			=> 'Letzte Raids',
 	'lastraids_desc'			=> 'Informationen der letzten Raids',
-	'pk_last_raids_limit'		=> 'Anzeige Limit der letzten Raids',
-	'pk_set_lastraids_showloot'	=> 'Loot zu den letzten Raids nicht anzeigen?',
-	'pk_lastraids_lootLimit'	=> 'Anzeige Limit der Items unter den letzten Raids',
+	'lastraids_f_limit'			=> 'Anzeige Limit der letzten Raids',
+	'lastraids_f_showloot'		=> 'Loot zu den letzten Raids nicht anzeigen?',
+	'lastraids_f_lootLimit'		=> 'Anzeige Limit der Items unter den letzten Raids',
 	'lastraids_no_raids'		=> 'Keine Raids vorhanden.',
 );
 ?>

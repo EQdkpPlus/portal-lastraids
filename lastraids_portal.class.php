@@ -21,46 +21,34 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class lastraids_portal extends portal_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'pdh', 'pdc', 'core', 'game', 'time', 'config', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
-	protected $path		= 'lastraids';
-	protected $data		= array(
+	protected static $path		= 'lastraids';
+	protected static $data		= array(
 		'name'			=> 'LastRaids Module',
 		'version'		=> '2.0.0',
 		'author'		=> 'Corgan',
 		'icon'			=> 'fa-trophy',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Information on last raids',
+		'lang_prefix'	=> 'lastraids_'
 	);
-	protected $positions = array('left1', 'left2', 'right');
+	protected static $positions = array('left1', 'left2', 'right');
 	protected $settings	= array(
-		'pk_last_raids_limit'	=> array(
-			'name'		=> 'pk_last_raids_limit',
-			'language'	=> 'pk_last_raids_limit',
-			'property'	=> 'text',
+		'limit'	=> array(
+			'type'		=> 'text',
 			'size'		=> '2',
-			'help'		=> 'pk_help_nextraids_limit'
 		),
-			'pk_set_lastraids_showloot'	=> array(
-			'name'		=> 'pk_set_lastraids_showloot',
-			'language'	=> 'pk_set_lastraids_showloot',
-			'property'	=> 'checkbox',
+		'showloot'	=> array(
+			'type'		=> 'checkbox',
 			'size'		=> false,
 			'options'	=> false,
-			'help'		=> 'pk_help_lastitems_deactive'
 		),
-		'pk_lastraids_lootLimit'	=> array(
-			'name'		=> 'pk_lastraids_lootLimit',
-			'language'	=> 'pk_lastraids_lootLimit',
-			'property'	=> 'text',
+		'lootLimit'	=> array(
+			'type'		=> 'text',
 			'size'		=> '2',
-			'help'		=> 'pk_help_lastitems_limit'
 		),
 	);
-	protected $install	= array(
+	protected static $install	= array(
 		'autoenable'		=> '1',
 		'defaultposition'	=> 'right',
 		'defaultnumber'		=> '3',
@@ -83,7 +71,7 @@ class lastraids_portal extends portal_generic {
 		$output = $this->pdc->get('portal.modul.lastraids',false,true);
 		if (!$output) {
 			$output = '<table width="100%" class="colorswitch">';
-			$limit = ($this->config->get('pk_last_raids_limit') > 0) ? $this->config->get('pk_last_raids_limit') : 5;
+			$limit = ($this->config('limit') > 0) ? $this->config('limit') : 5;
 			$lastraids = $this->pdh->maget('raid', array('event', 'date', 'note', 'value'), 0, array($this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc')));
 			$lastraids = array_slice($lastraids, 0, $limit, true);
 			if (!is_array($lastraids) || count($lastraids) < 1) {
@@ -93,8 +81,8 @@ class lastraids_portal extends portal_generic {
 			foreach ($lastraids as $raid_id => &$raid) {
 				//Items
 				$raid['items'] = '';
-				if (!$this->config->get('pk_set_lastraids_showloot')) {
-					$loot_limit = ($this->config->get('pk_lastraids_lootLimit') > 0) ? $this->config->get('pk_lastraids_lootLimit') : 7 ;
+				if (!$this->config('showloot')) {
+					$loot_limit = ($this->config('lootLimit') > 0) ? $this->config('lootLimit') : 7 ;
 					$raid_items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
 					if (is_array($raid_items)) {
 						$num = 0;
