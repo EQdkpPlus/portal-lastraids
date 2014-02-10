@@ -87,7 +87,7 @@ class lastraids_portal extends portal_generic {
 						}
 					}
 				}
-				$img = $this->game->decorate('events', array($raid['event'], 40));
+				$img = $this->game->decorate('events', $raid['event'], array(), 40);
 				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raid'), '', true));
 				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raid'), '', true));
 				$raid['note'] = (strlen($raid['note']) > 40) ? substr($raid['note'], 0, 37).'...' : $raid['note'];
