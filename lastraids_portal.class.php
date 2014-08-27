@@ -59,6 +59,8 @@ class lastraids_portal extends portal_generic {
 			'member_update',
 			'raid_update'
 	);
+	
+	protected static $apiLevel = 20;
 
 	public function output() {
 		infotooltip_js();
