@@ -84,14 +84,14 @@ class lastraids_portal extends portal_generic {
 						$num = 0;
 						foreach($raid_items as $item_id) {
 							if($num > $loot_limit) break;
-							$raid['items'] .= $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('item'), '', false, 0, 16, false, 'icon', true)).' ';
+							$raid['items'] .= $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('items'), '', false, 0, 16, false, 'icon', true)).' ';
 							$num++;
 						}
 					}
 				}
 				$img = $this->game->decorate('events', $raid['event'], array(), 40);
-				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raid'), '', true));
-				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raid'), '', true));
+				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raids'), '', true));
+				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raids'), '', true));
 				$raid['note'] = (strlen($raid['note']) > 40) ? substr($raid['note'], 0, 37).'...' : $raid['note'];
 				$output .= '<tr><td width="42"><a href="'.$link.'">'.$img.'</a></td>';
 				$output .= '<td>'.$html_link.'<br />'.$this->time->user_date($raid['date']).'<br />'.$raid['note'].'<br />'.$raid['items'].'</td></tr>';
