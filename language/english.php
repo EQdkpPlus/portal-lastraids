@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	Last raids Portal Module
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -19,17 +19,25 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$lang = array(
-	'lastraids'					=> 'Last Raids',
-	'lastraids_name'			=> 'Last Raids',
-	'lastraids_desc'			=> 'Information on last raids',
-	'lastraids_f_limit'			=> 'Last Raids Limit',
-	'lastraids_f_showloot'		=> 'Don´t Show Items below the Last Raids?',
-	'lastraids_f_lootLimit'		=> 'Limit the Items',
-	'lastraids_no_raids'		=> 'No Raids available.',
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: portal/lastraids/language/english.php
+//Source-Language: german
+
+$lang = array( 
+	"lastraids" => 'Last Raids',
+	"lastraids_name" => 'Last Raids',
+	"lastraids_desc" => 'Information on last raids',
+	"lastraids_f_limit" => 'Last Raids Limit',
+	"lastraids_f_showloot" => 'Don´t Show Items below the Last Raids?',
+	"lastraids_f_lootLimit" => 'Limit the Items',
+	"lastraids_no_raids" => 'No Raids available.',
+	
 );
+
 ?>
