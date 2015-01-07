@@ -28,7 +28,7 @@ class lastraids_portal extends portal_generic {
 	protected static $path		= 'lastraids';
 	protected static $data		= array(
 		'name'			=> 'LastRaids Module',
-		'version'		=> '2.0.0',
+		'version'		=> '3.0.0',
 		'author'		=> 'Corgan',
 		'icon'			=> 'fa-trophy',
 		'contact'		=> EQDKP_PROJECT_URL,
