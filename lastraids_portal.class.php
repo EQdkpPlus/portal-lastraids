@@ -69,7 +69,7 @@ class lastraids_portal extends portal_generic {
 		infotooltip_js();
 		$output = $this->pdc->get('portal.modul.lastraids',false,true);
 		if (!$output) {
-			$output = '<table width="100%" class="colorswitch">';
+			$output = '<table class="table fullwidth colorswitch">';
 			$limit = ($this->config('limit') > 0) ? $this->config('limit') : 5;
 			$lastraids = $this->pdh->maget('raid', array('event', 'date', 'note', 'value'), 0, array($this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc')));
 			$lastraids = array_slice($lastraids, 0, $limit, true);
