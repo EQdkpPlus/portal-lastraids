@@ -67,7 +67,7 @@ class lastraids_portal extends portal_generic {
 
 	public function output() {
 		infotooltip_js();
-		$output = $this->pdc->get('portal.module.lastraids',false,true);
+		$output = $this->pdc->get('portal.module.lastraids.'.$this->user->lang_name,false,true);
 		if (!$output) {
 			$output = '<table class="table fullwidth colorswitch">';
 			$limit = ($this->config('limit') > 0) ? $this->config('limit') : 5;
@@ -100,7 +100,7 @@ class lastraids_portal extends portal_generic {
 				$output .= '<td>'.$html_link.'<br />'.$this->time->user_date($raid['date']).'<br />'.$raid['note'].'<br />'.$raid['items'].'</td></tr>';
 			}
 			$output .= '</table>';
-			$this->pdc->put('portal.module.lastraids',$output,86400,false,true);
+			$this->pdc->put('portal.module.lastraids.'.$this->user->lang_name,$output,86400,false,true);
 		}
 		return $output;
 	}
