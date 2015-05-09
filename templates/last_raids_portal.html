@@ -1,0 +1,23 @@
+<table class="table fullwidth colorswitch">
+	<tbody>
+	<!-- IF PM_LR_RAIDS > 0 -->
+	<!-- BEGIN pm_lr_event -->
+		<tr>
+			<td width="42"><a href="{pm_lr_event.LINK}">{pm_lr_event.ICON}</a></td>
+			<td>
+				<a href="{pm_lr_event.LINK}">{pm_lr_event.NAME}</a><br />
+				{pm_lr_event.DATE}<br />
+				{pm_lr_event.NOTE}<br />
+				<!-- IF PM_LR_CNF_SHOWLOOT -->
+				<!-- BEGIN item -->
+				{pm_lr_event.item.ICON}
+				<!-- END item -->
+				<!-- ENDIF -->
+			</td>
+		</tr>
+	<!-- END pm_lr_event -->
+	<!-- ELSE -->
+	<tr><td>{L_lastraids_no_raids}</td></tr>
+	<!-- ENDIF -->
+	</tbody>
+</table>
