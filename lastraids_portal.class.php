@@ -62,47 +62,51 @@ class lastraids_portal extends portal_generic {
 			'member_update',
 			'raid_update'
 	);
+	public $template_file = 'last_raids_portal.html';
 	
 	protected static $apiLevel = 20;
 
-	public function output() {
+	public function output(){
 		infotooltip_js();
-		$output = $this->pdc->get('portal.module.lastraids.'.$this->user->lang_name,false,true);
-		if (!$output) {
-			$output = '<table class="table fullwidth colorswitch">';
-			$limit = ($this->config('limit') > 0) ? $this->config('limit') : 5;
-			$lastraids = $this->pdh->maget('raid', array('event', 'date', 'note', 'value'), 0, array($this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc')));
-			$lastraids = array_slice($lastraids, 0, $limit, true);
-			if (!is_array($lastraids) || count($lastraids) < 1) {
-				return $this->user->lang('lastraids_no_raids');
-			}
+		
+		$limit		= ($this->config('limit') > 0)? $this->config('limit') : 5;
+		$show_loot	= $this->config('showloot');
+		$loot_limit = ($this->config('lootLimit') > 0)? $this->config('lootLimit') : 7 ;
+		
+		$lastraids	= $this->pdh->maget('raid', array('event', 'date', 'note', 'value'), 0, array($this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc')));
+		$lastraids	= array_slice($lastraids, 0, $limit, true);
+		
+		foreach($lastraids as $raid_id => $raid){
+			$raid_items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
+			$raid_items = array_slice($raid_items, 0, $loot_limit, true);
 			
-			foreach ($lastraids as $raid_id => &$raid) {
-				//Items
-				$raid['items'] = '';
-				if (!$this->config('showloot')) {
-					$loot_limit = ($this->config('lootLimit') > 0) ? $this->config('lootLimit') : 7 ;
-					$raid_items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
-					if (is_array($raid_items)) {
-						$num = 0;
-						foreach($raid_items as $item_id) {
-							if($num > $loot_limit) break;
-							$raid['items'] .= $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('items'), '', false, 0, 16, false, 'icon', true)).' ';
-							$num++;
-						}
-					}
-				}
-				$img = $this->game->decorate('events', $raid['event'], array(), 40);
-				$link = $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raids'), '', true));
-				$html_link = $this->pdh->geth('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raids'), '', true));
-				$raid['note'] = (strlen($raid['note']) > 40) ? substr($raid['note'], 0, 37).'...' : $raid['note'];
-				$output .= '<tr><td width="42"><a href="'.$link.'">'.$img.'</a></td>';
-				$output .= '<td>'.$html_link.'<br />'.$this->time->user_date($raid['date']).'<br />'.$raid['note'].'<br />'.$raid['items'].'</td></tr>';
+			$this->tpl->assign_block_vars('pm_lr_event',array(
+				'ID'	=> $raid['event'],
+				'NAME'	=> $this->pdh->get('raid', 'event_name', array($raid_id)),
+				'DATE'	=> $this->time->user_date($raid['date']),
+				'NOTE'	=> (strlen($raid['note']) > 40) ? substr($raid['note'], 0, 37).'...' : $raid['note'],
+				'VALUE'	=> $raid['value'],
+				'ICON'	=> $this->game->decorate('events', $raid['event'], array(), 40),
+				'LINK'	=> $this->pdh->get('raid', 'raidlink', array($raid_id, $this->routing->simpleBuild('raids'), '', true)),
+			));
+			
+			foreach($raid_items as $item_id){
+				$this->tpl->assign_block_vars('pm_lr_event.item',array(
+					'ICON'	=> $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('items'), '', false, 0, 16, false, 'icon', true)).' ',
+				));
 			}
-			$output .= '</table>';
-			$this->pdc->put('portal.module.lastraids.'.$this->user->lang_name,$output,86400,false,true);
 		}
-		return $output;
+		
+		$this->tpl->assign_vars(array(
+			'PM_LR_CNF_LIMIT'		=> $limit,
+			'PM_LR_CNF_SHOWLOOT'	=> $show_loot,
+			'PM_LR_CNF_LOOT_LIMIT'	=> $loot_limit,
+			'PM_LR_RAIDS'			=> count($lastraids),
+		));
+		
+		
+		return 'Error: Template file is empty.';
 	}
+	
 }
 ?>
